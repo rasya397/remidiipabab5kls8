@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Remedial IPA: Reaksi Kimia & Dinamikanya</title>
+  <title>Remedial IPA: Unsur, Senyawa & Campuran</title>
   <style>
     :root {
       --primary: #059669;
@@ -48,7 +48,7 @@
       width: 95%;
       max-width: 700px;
       height: auto;
-      max-height: 90vh;
+      max-height: 95vh;
       background: var(--card-bg);
       border-radius: 1.5rem;
       box-shadow: 0 10px 30px rgba(5, 150, 105, 0.15);
@@ -90,8 +90,6 @@
       box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
     }
 
-    button { font: inherit; }
-
     .primary-btn {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
@@ -119,931 +117,399 @@
       box-shadow: none;
       transition: transform 0.15s;
     }
-    .secondary-btn:hover { transform: translateY(-1px); }
 
     .history-section { margin-top: 2rem; border-top: 2px dashed #e5e7eb; padding-top: 1.5rem; }
-
-    .history-title {
-      font-size: 1rem;
-      font-weight: bold;
-      color: var(--text-color);
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .clear-history-btn {
-      background: none;
-      border: none;
-      color: #ef4444;
-      font-size: 0.8rem;
-      padding: 0;
-      cursor: pointer;
-      width: auto;
-      text-decoration: underline;
-    }
-    .clear-history-btn:hover { color: #b91c1c; }
-
-    .history-list { list-style: none; max-height: 220px; overflow-y: auto; }
-
-    .history-item {
-      background: #f9fafb;
-      padding: 0.8rem;
-      border-radius: 0.5rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-      border-left: 4px solid #ccc;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.75rem;
-    }
+    .history-title { font-size: 1rem; font-weight: bold; color: var(--text-color); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .clear-history-btn { background: none; border: none; color: #ef4444; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+    .history-list { list-style: none; max-height: 250px; overflow-y: auto; }
+    .history-item { background: #f9fafb; padding: 0.8rem; border-radius: 0.5rem; margin-bottom: 0.5rem; font-size: 0.85rem; border-left: 4px solid #ccc; display: flex; justify-content: space-between; align-items: center; }
     .history-item.completed { border-left-color: var(--success); }
     .history-item.disqualified { border-left-color: var(--error); background: #fef2f2; }
 
-    .history-details { display: flex; flex-direction: column; gap: 0.2rem; }
-    .history-score { font-weight: bold; font-size: 1rem; text-align: right; }
+    #quiz-screen { display: none; }
+    .header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.9rem; color: #4b5563; background: #f0fdf4; padding: 0.8rem; border-radius: 0.8rem; font-weight: 600; }
 
-    #quiz-screen { display: none; padding-bottom: 2rem; }
-
-    .header-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-      color: #4b5563;
-      background: #f0fdf4;
-      padding: 0.8rem;
-      border-radius: 0.8rem;
-      font-weight: 600;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 10px;
-      background-color: #e5e7eb;
-      border-radius: 5px;
-      margin-bottom: 1.25rem;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      width: 0%;
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    .progress-bar { width: 100%; height: 10px; background-color: #e5e7eb; border-radius: 5px; margin-bottom: 1.25rem; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); width: 0%; transition: width 0.5s; }
 
     .question-box { margin-bottom: 1.5rem; text-align: center; }
+    .question-text { font-size: 1rem; font-weight: 700; color: var(--text-color); margin-bottom: 1rem; line-height: 1.5; }
 
-    .question-text {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text-color);
-      margin-bottom: 1rem;
-      line-height: 1.6;
-    }
+    .answer-slots { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; min-height: 3.5rem; padding: 0.8rem; background: #f8fafc; border-radius: 1rem; border: 1px dashed #cbd5e1; }
+    .slot { width: 40px; height: 40px; background: white; border: 2px solid var(--primary); border-radius: 0.6rem; display: inline-flex; justify-content: center; align-items: center; font-size: 1.2rem; font-weight: bold; color: var(--primary-dark); cursor: pointer; transition: all 0.2s; }
+    .slot.empty { background: #e2e8f0; border-color: #cbd5e1; cursor: default; }
 
-    .answer-slots {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      min-height: 3.5rem;
-      padding: 1rem;
-      background: #f8fafc;
-      border-radius: 1rem;
-      border: 1px dashed #cbd5e1;
-    }
-
-    .slot {
-      width: 45px;
-      height: 45px;
-      padding: 0;
-      background: white;
-      border: 2px solid var(--primary);
-      border-radius: 0.8rem;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: all 0.2s;
-    }
-
-    .slot.empty {
-      background: #e2e8f0;
-      border-color: #cbd5e1;
-      color: transparent;
-      cursor: default;
-    }
-
-    .quiz-actions { display: flex; justify-content: center; margin-bottom: 1rem; }
-
-    .letter-pool {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      padding: 0 0.5rem;
-    }
-
-    .letter-btn {
-      width: 50px;
-      height: 50px;
-      padding: 0;
-      background-color: white;
-      border: 2px solid #d1d5db;
-      border-radius: 1rem;
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #4b5563;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #d1d5db;
-      transition: all 0.1s;
-    }
-    .letter-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #d1d5db; }
+    .letter-pool { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; }
+    .letter-btn { width: 45px; height: 45px; background: white; border: 2px solid #d1d5db; border-radius: 0.8rem; display: inline-flex; justify-content: center; align-items: center; font-size: 1.1rem; font-weight: bold; color: #4b5563; cursor: pointer; box-shadow: 0 4px 0 #d1d5db; transition: all 0.1s; }
+    .letter-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #d1d5db; }
     .letter-btn.used { opacity: 0; pointer-events: none; transform: scale(0.8); }
 
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-8px); }
-      40% { transform: translateX(8px); }
-      60% { transform: translateX(-4px); }
-      80% { transform: translateX(4px); }
-    }
-
-    .shake { animation: shake 0.5s ease-in-out; border-color: var(--error) !important; color: var(--error) !important; }
-    .correct { background-color: var(--success) !important; color: white !important; border-color: var(--success) !important; transform: scale(1.1); }
-
     #result-screen { display: none; text-align: center; }
+    .score-circle { width: 120px; height: 120px; background: var(--bg-color); border: 5px solid var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2.5rem; font-weight: bold; color: var(--primary-dark); margin: 1rem auto; transition: all 0.3s; }
 
-    .score-circle {
-      width: 150px;
-      height: 150px;
-      background: var(--bg-color);
-      border: 5px solid var(--primary);
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 3rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      margin: 1rem auto;
-      box-shadow: 0 0 20px rgba(5, 150, 105, 0.2);
-    }
+    #warning-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(185, 28, 28, 0.98); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; color: white; text-align: center; padding: 2rem; }
+    #warning-timer { font-size: 5rem; font-weight: 800; margin: 1rem 0; }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 2rem 0;
-      text-align: left;
-    }
-
-    .stat-item {
-      background: #f9fafb;
-      padding: 1rem;
-      border-radius: 0.8rem;
-      border-left: 4px solid var(--primary);
-    }
-
-    .stat-label { font-size: 0.8rem; color: #6b7280; display: block; margin-bottom: 0.3rem; }
-    .stat-value { font-weight: 700; font-size: 1.1rem; color: #1f2937; }
-
-    #warning-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(185, 28, 28, 0.98);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      color: white;
-      text-align: center;
-      padding: 2rem;
-      gap: 0.75rem;
-    }
-
-    #warning-timer {
-      font-size: 6rem;
-      font-weight: 800;
-      margin: 0.25rem 0;
-      text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .overlay-btn {
-      background: #ffffff;
-      color: #991b1b;
-      border: none;
-      padding: 0.8rem 1.2rem;
-      border-radius: 0.9rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .overlay-btn:active { transform: scale(0.98); }
-
-    #feedback-msg {
-      text-align: center;
-      margin-top: 0.5rem;
-      font-weight: bold;
-      height: 1.5rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    :focus-visible { outline: 3px solid rgba(5, 150, 105, 0.35); outline-offset: 2px; }
+    #feedback-msg { text-align: center; margin-top: 0.5rem; font-weight: bold; height: 1.5rem; opacity: 0; transition: opacity 0.3s; }
 
     @media (max-width: 480px) {
-      .app-container { width: 100%; height: 100vh; max-height: 100vh; border-radius: 0; padding: 1.5rem; }
-      h1 { font-size: 1.3rem; }
-      .question-text { font-size: 1rem; }
-      .slot { width: 38px; height: 38px; font-size: 1.1rem; }
-      .letter-btn { width: 42px; height: 42px; font-size: 1.1rem; }
-      #warning-timer { font-size: 5rem; }
+      .app-container { padding: 1.2rem; }
+      .slot { width: 34px; height: 34px; font-size: 1rem; }
+      .letter-btn { width: 38px; height: 38px; font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <div id="warning-overlay" role="dialog" aria-modal="true" aria-labelledby="warning-title">
-    <h1 id="warning-title">PERINGATAN!</h1>
-    <p style="font-size: 1.2rem; max-width: 420px; line-height: 1.5;">
-      Layar terdeteksi tidak fokus / keluar dari mode penuh.<br />
-      Kembali ke mode penuh segera!
-    </p>
-    <p id="warning-reason" style="font-size: 0.95rem; opacity: 0.9;"></p>
+  <div id="warning-overlay">
+    <h1>PERINGATAN!</h1>
+    <p>Layar tidak fokus. Kembali ke aplikasi segera!</p>
     <div id="warning-timer">3</div>
-    <button id="warning-return-btn" class="overlay-btn" type="button">MASUK FULLSCREEN</button>
+    <button id="warning-return-btn" class="primary-btn" style="background: white; color: #991b1b; width: auto;">KEMBALI KE UJIAN</button>
   </div>
 
   <div class="app-container">
-
     <div id="login-screen">
       <div class="header-decoration">
-        <span class="header-icon">⚗️</span>
-        <h1>Remedial Sains<span>Reaksi Kimia & Dinamikanya</span></h1>
+        <span class="header-icon">🔬</span>
+        <h1>Remedial IPA Kelas VIII<span>Bab 5: Unsur, Senyawa, & Campuran</span></h1>
       </div>
-
-      <p style="text-align:center; margin-bottom: 2rem; color: #666; line-height: 1.5;">
-        Silakan masukkan nama Anda untuk memulai ujian remedial.
-      </p>
-
       <div class="input-group">
         <input type="text" id="student-name" placeholder="Nama Lengkap Siswa" autocomplete="off" />
       </div>
-
       <button id="start-btn" class="primary-btn" type="button">MULAI REMEDIAL</button>
-
-      <p style="font-size: 0.8rem; color: #9ca3af; margin-top: 1.5rem; text-align: center; font-style: italic;">
-        *Sistem Anti-Curang Aktif: Dilarang pindah tab/aplikasi.
-      </p>
-
       <div class="history-section">
-        <div class="history-title">
-          Riwayat Remedial Saya
-          <button class="clear-history-btn" id="clear-history-btn" type="button">Hapus Riwayat</button>
-        </div>
-        <ul id="history-list" class="history-list">
-          <li style="text-align:center; color:#999; padding:1rem;">Belum ada riwayat.</li>
-        </ul>
+        <div class="history-title">Riwayat Remedial<button class="clear-history-btn" id="clear-history-btn">Hapus</button></div>
+        <ul id="history-list" class="history-list"></ul>
       </div>
     </div>
 
     <div id="quiz-screen">
       <div class="header-info">
-        <div>👤 <span id="display-name">Siswa</span></div>
-        <div>📘 <span id="progress-text">0/17</span></div>
-        <div>⏱️ <span id="timer">00:00</span></div>
+        <div id="display-name">Siswa</div>
+        <div id="progress-text">0/20</div>
+        <div id="timer">00:00</div>
       </div>
-
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
-      </div>
-
-      <div class="question-box">
-        <div class="question-text" id="question-text">Loading...</div>
-      </div>
-
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="question-box"><div class="question-text" id="question-text">Loading...</div></div>
       <div class="answer-slots" id="answer-slots"></div>
-
-      <div id="feedback-msg" role="status" aria-live="polite"></div>
-
-      <div class="quiz-actions">
-        <button id="reset-answer-btn" class="secondary-btn" type="button">Hapus Jawaban</button>
+      <div id="feedback-msg"></div>
+      <div style="text-align:center; margin-bottom: 1rem;">
+        <button id="reset-answer-btn" class="secondary-btn">Hapus Jawaban</button>
       </div>
-
       <div class="letter-pool" id="letter-pool"></div>
     </div>
 
     <div id="result-screen">
-      <div class="header-decoration">
-        <span class="header-icon">🏆</span>
-        <h1>Hasil Remedial</h1>
-      </div>
-
+      <div class="header-decoration"><span class="header-icon" id="result-icon">🏆</span><h1 id="result-title">Hasil Remedial</h1></div>
       <div class="score-circle" id="final-score">0</div>
-      <p style="color: var(--primary); font-weight: bold;">Skor Akhir</p>
-
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="stat-label">Nama Siswa</span>
-          <span class="stat-value" id="result-name">-</span>
-        </div>
-
-        <div class="stat-item">
-          <span class="stat-label">Durasi</span>
-          <span class="stat-value" id="result-duration">-</span>
-        </div>
-
-        <div class="stat-item">
-          <span class="stat-label">Jam Mulai</span>
-          <span class="stat-value" id="result-start">-</span>
-        </div>
-
-        <div class="stat-item">
-          <span class="stat-label">Jam Selesai</span>
-          <span class="stat-value" id="result-end">-</span>
-        </div>
-
-        <div class="stat-item">
-          <span class="stat-label">Benar / Total</span>
-          <span class="stat-value" id="result-ratio">-</span>
-        </div>
-      </div>
-
-      <button id="return-btn" class="primary-btn" type="button">Selesai / Kembali ke Awal</button>
+      <p id="result-info" style="margin-bottom: 1.5rem; font-weight: bold; line-height: 1.6;"></p>
+      <div id="submit-status" style="font-size: 0.85rem; margin-bottom: 1.25rem; color: #6b7280; font-style: italic;">Mengirim hasil...</div>
+      <button id="return-btn" class="primary-btn">Kembali ke Menu Utama</button>
     </div>
-
   </div>
 
   <script>
-    // --- DATA SOAL (17 Soal Remedial) ---
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgvj5xYpGjxzYIWR-3GYuaovIG3EVv3UiheFtWqXUKsK-7C_hL4_c8LVKYqYO3S9nSbQ/exec";
+
     const questionBank = [
-      { q: "Perubahan yang menghasilkan zat baru dengan sifat berbeda disebut perubahan...?", a: "KIMIA" },
-      { q: "Peristiwa kapur barus menyublim termasuk contoh perubahan...?", a: "FISIKA" },
-      { q: "Angka indeks dalam rumus kimia menyatakan jumlah ... unsur tersebut?", a: "ATOM" },
-      { q: "Simbol (l) dalam persamaan reaksi menunjukkan wujud zat berupa cairan...?", a: "MURNI" },
-      { q: "Reaksi antara metana dan oksigen yang menghasilkan panas disebut reaksi...?", a: "PEMBAKARAN" },
-      { q: "Reaksi pemecahan satu senyawa menjadi zat-zat yang lebih sederhana disebut...?", a: "DEKOMPOSISI" },
-      { q: "Larutan yang memiliki nilai pH tepat sama dengan tujuh bersifat...?", a: "NETRAL" },
-      { q: "Reaksi kimia yang melepaskan energi panas ke lingkungan disebut reaksi...?", a: "EKSOTERM" },
-      { q: "Reaksi yang menyerap panas sehingga energi produk lebih tinggi adalah...?", a: "ENDOTERM" },
-      { q: "Energi minimum atau 'bukit hambatan' untuk memulai reaksi disebut energi...?", a: "AKTIVASI" },
-      { q: "Daging yang dipotong kecil lebih cepat matang karena faktor luas...?", a: "PERMUKAAN" },
-      { q: "Menyimpan makanan di kulkas memperlambat pembusukan karena faktor...?", a: "SUHU" },
-      { q: "Zat yang mempercepat laju reaksi tanpa ikut terkonsumsi disebut...?", a: "KATALIS" },
-      { q: "Katalis biologis yang bekerja mempercepat metabolisme dalam tubuh adalah...?", a: "ENZIM" },
-      { q: "Hujan asam terjadi jika air hujan memiliki nilai pH di bawah lima koma...?", a: "ENAM" },
-      { q: "Faktor utama penyebab perkaratan pada besi adalah air dan gas...?", a: "OKSIGEN" },
-      { q: "Meningkatkan jumlah partikel agar tumbukan lebih sering disebut faktor...?", a: "KONSENTRASI" },
+      { q: "Organisasi internasional yang mengatur penamaan unsur kimia adalah...?", a: "IUPAC" },
+      { q: "Unsur logam yang berwujud cair pada suhu ruang adalah...?", a: "MERKURI" },
+      { q: "Bagian terkecil dari suatu unsur yang masih memiliki sifat unsur tersebut...?", a: "ATOM" },
+      { q: "Subpartikel atom yang bermuatan negatif adalah...?", a: "ELEKTRON" },
+      { q: "Baris horizontal dalam tabel periodik unsur disebut...?", a: "PERIODE" },
+      { q: "Unsur yang memiliki sifat antara logam dan nonlogam disebut...?", a: "METALOID" },
+      { q: "Zat tunggal yang terbentuk dari dua unsur atau lebih melalui ikatan kimia...?", a: "SENYAWA" },
+      { q: "Campuran yang serba sama dan tidak bisa dibedakan lagi komponennya...?", a: "LARUTAN" },
+      { q: "Campuran heterogen yang partikelnya mengendap jika didiamkan...?", a: "SUSPENSI" },
+      { q: "Susu dan santan adalah contoh campuran tipe...?", a: "KOLOID" },
+      { q: "Pemisahan campuran berdasarkan perbedaan ukuran partikel menggunakan kertas...?", a: "FILTRASI" },
+      { q: "Metode pemisahan campuran berdasarkan perbedaan titik didih zat...?", a: "DISTILASI" },
+      { q: "Pemisahan komponen warna pada tinta menggunakan metode...?", a: "KROMATOGRAFI" },
+      { q: "Proses pemurnian garam dari air laut melalui penguapan disebut...?", a: "KRISTALISASI" },
+      { q: "Simbol kimia (s) dalam persamaan reaksi menunjukkan wujud zat...?", a: "PADAT" },
+      { q: "Unsur paling melimpah di alam semesta adalah...?", a: "HIDROGEN" },
+      { q: "Simbol (aq) dalam kimia berarti zat tersebut terlarut dalam...?", a: "AIR" },
+      { q: "Emas dan perak termasuk kelompok logam...?", a: "MULIA" },
+      { q: "Alat laboratorium untuk memutar campuran dengan sangat cepat adalah...?", a: "SENTRIFUGAL" },
+      { q: "Gas yang digunakan untuk mengisi balon karena sangat ringan adalah...?", a: "HELIUM" }
     ];
 
-    // --- KONFIG ---
-    const CONFIG = {
-      maxHistory: 10,
-      warningSeconds: 3,
-      ignoreFocusEventsMs: 1200,
-      minSafeWidth: 320
+    let state = {
+      questions: [], index: 0, correct: 0, startTime: null, timerSec: 0, timerInterval: null,
+      userName: '', currentAnswer: [], pool: [], inputLocked: false, focusMode: false, warningInterval: null
     };
 
-    const STORAGE = {
-      USERNAME: 'kimia_remedi_username',
-      HISTORY: 'kimia_remedi_history'
+    const dom = {
+      login: document.getElementById('login-screen'), quiz: document.getElementById('quiz-screen'), result: document.getElementById('result-screen'),
+      nameInp: document.getElementById('student-name'), startBtn: document.getElementById('start-btn'), history: document.getElementById('history-list'),
+      dispName: document.getElementById('display-name'), progText: document.getElementById('progress-text'), timer: document.getElementById('timer'),
+      progFill: document.getElementById('progress-fill'), qText: document.getElementById('question-text'), slots: document.getElementById('answer-slots'),
+      pool: document.getElementById('letter-pool'), feedback: document.getElementById('feedback-msg'), finalScore: document.getElementById('final-score'),
+      warning: document.getElementById('warning-overlay'), warnTimer: document.getElementById('warning-timer'), returnBtn: document.getElementById('return-btn'),
+      submitStatus: document.getElementById('submit-status'), resultIcon: document.getElementById('result-icon'), resultTitle: document.getElementById('result-title'),
+      resultInfo: document.getElementById('result-info')
     };
 
-    // --- STATE ---
-    const state = {
-      questions: [],
-      index: 0,
-      correct: 0,
-      rawScore: 0,
-      startTime: null,
-      timerSec: 0,
-      timerInterval: null,
-      warningInterval: null,
-      focusMode: false,
-      ignoreFocusUntil: 0,
-      userName: '',
-      currentAnswer: [],
-      pool: [],
-      initialWindowWidth: 0,
-      inputLocked: false,
-      fullscreenSupported: false
-    };
-
-    // --- DOM CACHE ---
-    const dom = {};
-
-    document.addEventListener('DOMContentLoaded', () => {
-      dom.loginScreen = document.getElementById('login-screen');
-      dom.quizScreen = document.getElementById('quiz-screen');
-      dom.resultScreen = document.getElementById('result-screen');
-
-      dom.studentName = document.getElementById('student-name');
-      dom.startBtn = document.getElementById('start-btn');
-      dom.clearHistoryBtn = document.getElementById('clear-history-btn');
-      dom.historyList = document.getElementById('history-list');
-
-      dom.displayName = document.getElementById('display-name');
-      dom.progressText = document.getElementById('progress-text');
-      dom.timer = document.getElementById('timer');
-
-      dom.progressFill = document.getElementById('progress-fill');
-      dom.questionText = document.getElementById('question-text');
-      dom.answerSlots = document.getElementById('answer-slots');
-      dom.letterPool = document.getElementById('letter-pool');
-      dom.feedbackMsg = document.getElementById('feedback-msg');
-      dom.resetAnswerBtn = document.getElementById('reset-answer-btn');
-
-      dom.finalScore = document.getElementById('final-score');
-      dom.resultName = document.getElementById('result-name');
-      dom.resultDuration = document.getElementById('result-duration');
-      dom.resultStart = document.getElementById('result-start'); 
-      dom.resultEnd = document.getElementById('result-end');     
-      dom.resultRatio = document.getElementById('result-ratio');
-      dom.returnBtn = document.getElementById('return-btn');
-
-      dom.warningOverlay = document.getElementById('warning-overlay');
-      dom.warningTimer = document.getElementById('warning-timer');
-      dom.warningReason = document.getElementById('warning-reason');
-      dom.warningReturnBtn = document.getElementById('warning-return-btn');
-
-      loadHistory();
-
-      const savedName = localStorage.getItem(STORAGE.USERNAME);
-      if (savedName) dom.studentName.value = savedName;
-
-      dom.startBtn.addEventListener('click', startQuiz);
-      dom.clearHistoryBtn.addEventListener('click', clearHistory);
-      dom.returnBtn.addEventListener('click', returnToLogin);
-      dom.resetAnswerBtn.addEventListener('click', resetCurrentAnswer);
-
-      dom.studentName.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') startQuiz();
-      });
-
-      dom.warningReturnBtn.addEventListener('click', async () => {
-        await enterFullscreen();
-      });
-
-      document.addEventListener('keydown', handleKeyDown);
-      
-      // Update the progress text to show the correct total
-      dom.progressText.textContent = `0/${questionBank.length}`;
-    });
-
-    function showScreen(name) {
-      dom.loginScreen.style.display = (name === 'login') ? 'block' : 'none';
-      dom.quizScreen.style.display = (name === 'quiz') ? 'block' : 'none';
-      dom.resultScreen.style.display = (name === 'result') ? 'block' : 'none';
-    }
-
-    function formatCustomDate(dateObj) {
-      if (!dateObj) return null;
-      const d = new Date(dateObj);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      const hours = String(d.getHours()).padStart(2, '0');
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const seconds = String(d.getSeconds()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
-
-    function formatTimeOnly(dateObj) {
-      if (!dateObj) return '-';
-      const d = new Date(dateObj);
-      const hours = String(d.getHours()).padStart(2, '0');
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const seconds = String(d.getSeconds()).padStart(2, '0');
-      return `${hours}:${minutes}:${seconds}`;
-    }
-
-    function formatDateTime(value) {
-      if (!value) return '-';
-      return typeof value === 'string' ? value : formatCustomDate(value);
-    }
-
-    // --- QUIZ FLOW ---
-    async function startQuiz() {
-      const inputName = dom.studentName.value.trim();
-      if (!inputName) {
-        alert("Harap isi nama terlebih dahulu!");
-        dom.studentName.focus();
-        return;
-      }
-
-      state.userName = inputName;
-      localStorage.setItem(STORAGE.USERNAME, inputName);
-      dom.displayName.textContent = inputName;
-
-      state.fullscreenSupported = !!document.documentElement.requestFullscreen;
-      state.ignoreFocusUntil = Date.now() + CONFIG.ignoreFocusEventsMs;
-
-      if (state.fullscreenSupported) {
-        await enterFullscreen();
-      }
-
-      state.initialWindowWidth = window.innerWidth;
-      state.questions = shuffleArray([...questionBank]);
-      state.index = 0;
-      state.correct = 0;
-      state.rawScore = 0;
+    function startQuiz() {
+      const name = dom.nameInp.value.trim();
+      if (!name) return alert("Harap isi nama Anda!");
+      state.userName = name;
+      state.questions = shuffle([...questionBank]);
+      state.index = 0; state.correct = 0; state.timerSec = 0;
       state.startTime = new Date();
-      state.timerSec = 0;
-      state.inputLocked = false;
-
+      dom.dispName.textContent = name;
       showScreen('quiz');
-      startTimerDisplay();
-      enableFocusMode();
+      startTimer();
+      enableAntiCheat();
       loadQuestion();
     }
 
     function loadQuestion() {
-      const qData = state.questions[state.index];
-      dom.questionText.textContent = `${state.index + 1}. ${qData.q}`;
-      updateProgress();
-
-      state.currentAnswer = new Array(qData.a.length).fill(null);
-      state.pool = generateLetterPool(qData.a);
-
+      const q = state.questions[state.index];
+      dom.qText.textContent = `${state.index + 1}. ${q.q}`;
+      dom.progText.textContent = `${state.index + 1}/20`;
+      dom.progFill.style.width = `${((state.index + 1) / 20) * 100}%`;
+      state.currentAnswer = new Array(q.a.length).fill(null);
+      state.pool = generatePool(q.a);
       state.inputLocked = false;
-      dom.feedbackMsg.style.opacity = '0';
-      dom.feedbackMsg.textContent = '';
-
-      renderSlots();
-      renderPool();
+      dom.feedback.style.opacity = '0';
+      renderSlots(); renderPool();
     }
 
-    function updateProgress() {
-      const total = state.questions.length;
-      const current = state.index + 1;
-      dom.progressText.textContent = `${current}/${total}`;
-      const pct = (current / total) * 100;
-      dom.progressFill.style.width = `${pct}%`;
-    }
-
-    function generateLetterPool(answer) {
-      const cleanAnswer = String(answer).trim().toUpperCase();
-      let letters = cleanAnswer.split('');
-      const distractorsCount = Math.ceil(cleanAnswer.length * 0.6);
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-      for (let i = 0; i < distractorsCount; i++) {
-        letters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
-      }
-
-      const pool = letters.map((char, index) => ({
-        id: index,
-        char,
-        used: false
-      }));
-
-      return shuffleArray(pool);
+    function generatePool(ans) {
+      let chars = ans.split('');
+      const extras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+      for (let i = 0; i < 4; i++) chars.push(extras[Math.floor(Math.random() * 26)]);
+      return shuffle(chars.map((c, i) => ({ id: i, char: c, used: false })));
     }
 
     function renderSlots() {
-      dom.answerSlots.innerHTML = '';
-      state.currentAnswer.forEach((item, idx) => {
-        const slot = document.createElement('button');
-        slot.type = 'button';
-        slot.className = `slot ${item ? '' : 'empty'}`;
-        slot.textContent = item ? item.char : '';
-        slot.addEventListener('click', () => {
-          if (!state.focusMode || state.inputLocked) return;
-          removeLetterFromSlot(idx);
-        });
-        dom.answerSlots.appendChild(slot);
+      dom.slots.innerHTML = '';
+      state.currentAnswer.forEach((char, i) => {
+        const s = document.createElement('div');
+        s.className = `slot ${char ? '' : 'empty'}`;
+        s.textContent = char || '';
+        s.onclick = () => char && !state.inputLocked && removeChar(i);
+        dom.slots.appendChild(s);
       });
     }
 
     function renderPool() {
-      dom.letterPool.innerHTML = '';
-      state.pool.forEach((item) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = `letter-btn ${item.used ? 'used' : ''}`;
-        btn.textContent = item.char;
-        btn.addEventListener('click', () => {
-          if (!state.focusMode || state.inputLocked) return;
-          addLetterToSlot(item);
-        });
-        dom.letterPool.appendChild(btn);
+      dom.pool.innerHTML = '';
+      state.pool.forEach(item => {
+        const b = document.createElement('button');
+        b.className = `letter-btn ${item.used ? 'used' : ''}`;
+        b.textContent = item.char;
+        b.onclick = () => !item.used && !state.inputLocked && addChar(item);
+        dom.pool.appendChild(b);
       });
     }
 
-    function addLetterToSlot(item) {
-      const emptyIndex = state.currentAnswer.indexOf(null);
-      if (emptyIndex === -1) return;
-      state.currentAnswer[emptyIndex] = item;
+    function addChar(item) {
+      const idx = state.currentAnswer.indexOf(null);
+      if (idx === -1) return;
+      state.currentAnswer[idx] = item.char;
       item.used = true;
-      renderSlots();
-      renderPool();
-      if (!state.currentAnswer.includes(null)) {
-        checkAnswer();
-      }
+      renderSlots(); renderPool();
+      if (!state.currentAnswer.includes(null)) checkAnswer();
     }
 
-    function removeLetterFromSlot(index) {
-      const item = state.currentAnswer[index];
-      if (!item) return;
-      item.used = false;
-      state.currentAnswer[index] = null;
-      renderSlots();
-      renderPool();
-    }
-
-    function resetCurrentAnswer() {
-      if (!state.focusMode || state.inputLocked) return;
-      state.currentAnswer.forEach((item) => {
-        if (item) item.used = false;
-      });
-      state.currentAnswer = new Array(state.currentAnswer.length).fill(null);
-      dom.feedbackMsg.style.opacity = '0';
-      dom.feedbackMsg.textContent = '';
-      renderSlots();
-      renderPool();
-    }
-
-    function removeLastLetter() {
-      for (let i = state.currentAnswer.length - 1; i >= 0; i--) {
-        if (state.currentAnswer[i] !== null) {
-          removeLetterFromSlot(i);
-          break;
-        }
-      }
+    function removeChar(idx) {
+      const char = state.currentAnswer[idx];
+      const poolItem = state.pool.find(p => p.char === char && p.used);
+      if (poolItem) poolItem.used = false;
+      state.currentAnswer[idx] = null;
+      renderSlots(); renderPool();
     }
 
     function checkAnswer() {
-      const userAnswerStr = state.currentAnswer.map(item => item.char).join('');
-      const correctAnswer = state.questions[state.index].a;
-      const slots = dom.answerSlots.querySelectorAll('.slot');
-
-      if (userAnswerStr === correctAnswer) {
-        state.inputLocked = true;
-        slots.forEach(s => {
-          s.classList.remove('shake');
-          s.classList.add('correct');
-        });
-        dom.feedbackMsg.textContent = "Benar! 👍";
-        dom.feedbackMsg.style.color = "var(--success)";
-        dom.feedbackMsg.style.opacity = '1';
-        
-        state.correct += 1;
-        // Hitung persentase agar maksimal selalu tepat 100
-        state.rawScore = Math.round((state.correct / state.questions.length) * 100);
-        
-        setTimeout(nextQuestion, 900);
+      state.inputLocked = true;
+      const ans = state.currentAnswer.join('');
+      const correct = state.questions[state.index].a;
+      if (ans === correct) {
+        state.correct++;
+        dom.feedback.textContent = "BENAR! ✨";
+        dom.feedback.style.color = "var(--success)";
+        dom.feedback.style.opacity = '1';
+        setTimeout(() => (state.index < 19 ? (state.index++, loadQuestion()) : finish()), 800);
       } else {
-        slots.forEach(s => s.classList.add('shake'));
-        dom.feedbackMsg.textContent = "Salah, coba lagi! ❌";
-        dom.feedbackMsg.style.color = "var(--error)";
-        dom.feedbackMsg.style.opacity = '1';
+        dom.feedback.textContent = "SALAH! ❌";
+        dom.feedback.style.color = "var(--error)";
+        dom.feedback.style.opacity = '1';
         setTimeout(() => {
-          slots.forEach(s => s.classList.remove('shake'));
-        }, 500);
+          state.currentAnswer.forEach((c, i) => removeChar(i));
+          state.inputLocked = false;
+        }, 1000);
       }
     }
 
-    function nextQuestion() {
-      state.index++;
-      if (state.index < state.questions.length) {
-        loadQuestion();
-      } else {
-        finishQuiz();
+    async function sendResult(finalScore, status, endTime, answeredCount) {
+      if (!GOOGLE_SCRIPT_URL) return;
+      dom.submitStatus.textContent = "Sedang mengirim hasil ke laboratorium...";
+      
+      const data = new URLSearchParams();
+      data.append('nama', state.userName);
+      data.append('skor', finalScore);
+      data.append('status', status);
+      data.append('terjawab', answeredCount);
+      data.append('durasi', formatTime(state.timerSec));
+      data.append('waktu_mulai', state.startTime.toLocaleString());
+      data.append('waktu_selesai', endTime.toLocaleString());
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: data
+        });
+        dom.submitStatus.textContent = "✅ Data berhasil disimpan di spreadsheet.";
+      } catch (e) {
+        dom.submitStatus.textContent = "⚠️ Gagal mengirim data. Silakan screenshot halaman ini.";
       }
     }
 
-    function finishQuiz() {
-      const endTime = new Date(); 
-      disableFocusMode();
-      stopTimer();
-      const durationStr = formatDuration(state.timerSec);
-      const finalScoreVal = state.rawScore;
-
-      saveHistoryToStorage("Selesai", finalScoreVal, durationStr, state.startTime, endTime, state.questions.length, state.questions.length);
-
-      showScreen('result');
-      dom.resultName.textContent = state.userName;
-      dom.finalScore.textContent = finalScoreVal;
-      dom.resultDuration.textContent = durationStr;
-      dom.resultStart.textContent = formatTimeOnly(state.startTime);
-      dom.resultEnd.textContent = formatTimeOnly(endTime);
-      dom.resultRatio.textContent = `${state.correct} / ${state.questions.length}`;
-      exitFullscreenIfAny();
-    }
-
-    function returnToLogin() {
-      disableFocusMode();
-      stopTimer();
-      showScreen('login');
-      loadHistory();
-      exitFullscreenIfAny();
-    }
-
-    // --- TIMER ---
-    function startTimerDisplay() {
+    function finish() {
+      const endTime = new Date();
+      disableAntiCheat();
       clearInterval(state.timerInterval);
-      state.timerSec = 0;
-      dom.timer.textContent = "00:00";
+      const score = Math.round((state.correct / 20) * 100);
+      
+      dom.finalScore.textContent = score;
+      dom.finalScore.style.borderColor = "var(--primary)";
+      dom.finalScore.style.color = "var(--primary-dark)";
+      dom.resultIcon.textContent = "🏆";
+      dom.resultTitle.textContent = "Hasil Remedial";
+      dom.resultInfo.innerHTML = `<span style="color:var(--primary-dark)">Selesai!</span><br>Anda mengerjakan 20/20 soal<br>Durasi: ${formatTime(state.timerSec)}`;
+      
+      showScreen('result');
+      saveHistory(score, "Selesai", 20);
+      sendResult(score, "Selesai", endTime, 20);
+    }
+
+    function showScreen(s) {
+      dom.login.style.display = s === 'login' ? 'block' : 'none';
+      dom.quiz.style.display = s === 'quiz' ? 'block' : 'none';
+      dom.result.style.display = s === 'result' ? 'block' : 'none';
+    }
+
+    function startTimer() {
+      clearInterval(state.timerInterval);
       state.timerInterval = setInterval(() => {
         state.timerSec++;
-        dom.timer.textContent = formatClock(state.timerSec);
+        dom.timer.textContent = formatTime(state.timerSec);
       }, 1000);
     }
 
-    function stopTimer() {
-      clearInterval(state.timerInterval);
-      state.timerInterval = null;
+    function formatTime(s) {
+      const m = Math.floor(s / 60).toString().padStart(2, '0');
+      const sec = (s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
     }
 
-    function formatClock(seconds) {
-      const m = Math.floor(seconds / 60).toString().padStart(2, '0');
-      const s = (seconds % 60).toString().padStart(2, '0');
-      return `${m}:${s}`;
-    }
+    function shuffle(a) { return a.sort(() => Math.random() - 0.5); }
 
-    function formatDuration(seconds) {
-      const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
-      return `${m}m ${s}s`;
-    }
-
-    // --- DATA SENDER (Google Sheets) ---
-    function sendDataToGoogleSheet(historyItem) {
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbypnOPB2jNyUnURQt0LOf1crgKdYCx_wVBuJKq2E3LrDcRubq_Kbm1BM20Gl3gT8vY/exec';
-      if (!scriptURL || scriptURL === 'MASUKKAN_URL_SCRIPT_GOOGLE_SHEETS_ANDA_DI_SINI') return;
-
-      const params = new URLSearchParams();
-      params.append('nama', historyItem.name);
-      params.append('skor', historyItem.score);
-      params.append('status', historyItem.status);
-      params.append('durasi', historyItem.duration);
-      params.append('terjawab', historyItem.answered);
-      params.append('total_soal', historyItem.total);
-      params.append('waktu_mulai', historyItem.startISO);
-      params.append('waktu_selesai', historyItem.endISO);
-
-      fetch(scriptURL, { method: 'POST', body: params })
-      .catch(error => console.error("Gagal mengirim data:", error));
-    }
-
-    // --- HISTORY ---
-    function saveHistoryToStorage(status, scoreVal, durationStr, startDate, endDate, answered = 0, total = 0) {
-      const nameToSave = state.userName || localStorage.getItem(STORAGE.USERNAME) || "Tanpa Nama";
-      const historyItem = {
-        name: nameToSave,
-        status: status,
-        score: scoreVal,
-        duration: durationStr,
-        answered: answered,
-        total: total,
-        startISO: formatCustomDate(startDate),
-        endISO: formatCustomDate(endDate),
-        date: formatCustomDate(new Date())
-      };
-
-      let history = JSON.parse(localStorage.getItem(STORAGE.HISTORY)) || [];
-      history.unshift(historyItem);
-      if (history.length > CONFIG.maxHistory) history = history.slice(0, CONFIG.maxHistory);
-      localStorage.setItem(STORAGE.HISTORY, JSON.stringify(history));
-
-      sendDataToGoogleSheet(historyItem);
-    }
-
-    function loadHistory() {
-      const history = JSON.parse(localStorage.getItem(STORAGE.HISTORY)) || [];
-      dom.historyList.innerHTML = '';
-      if (history.length === 0) {
-        dom.historyList.innerHTML = '<li style="text-align:center; color:#999; padding:1rem;">Belum ada riwayat.</li>';
-        return;
-      }
-      history.forEach(item => {
-        const li = document.createElement('li');
-        li.className = `history-item ${item.status === 'Selesai' ? 'completed' : 'disqualified'}`;
-        li.innerHTML = `
-          <div class="history-details">
-            <span style="font-weight:bold; color:#374151;">${item.name}</span>
-            <span style="font-size:0.75rem; color:#6b7280;">${item.startISO} • ${item.status}</span>
-          </div>
-          <div class="history-score">${item.score} Poin<div style="font-size:0.7rem; font-weight:normal;">${item.duration}</div></div>
-        `;
-        dom.historyList.appendChild(li);
+    function saveHistory(s, status, answered) {
+      const h = JSON.parse(localStorage.getItem('ipa_remidi_h') || '[]');
+      h.unshift({ 
+        name: state.userName, 
+        score: s, 
+        status: status, 
+        answered: answered, 
+        date: new Date().toLocaleString() 
       });
+      localStorage.setItem('ipa_remidi_h', JSON.stringify(h.slice(0, 10)));
+      renderHistory();
     }
 
-    function clearHistory() {
-      if (confirm("Hapus semua riwayat remedial?")) {
-        localStorage.removeItem(STORAGE.HISTORY);
-        loadHistory();
-      }
+    function renderHistory() {
+      const h = JSON.parse(localStorage.getItem('ipa_remidi_h') || '[]');
+      dom.history.innerHTML = h.length ? h.map(i => {
+        const isDisq = i.status === 'Diskualifikasi';
+        return `
+          <li class="history-item ${isDisq ? 'disqualified' : 'completed'}">
+            <div>
+              <b>${i.name}</b><br>
+              <small>${i.date}</small><br>
+              <span style="font-size: 0.7rem; color: ${isDisq ? 'var(--error)' : 'var(--primary-dark)'}; font-weight: bold;">
+                ${i.status} • ${i.answered || 0}/20 soal
+              </span>
+            </div>
+            <div style="font-weight:bold; text-align:right;">
+              ${i.score}<br><small style="font-weight:normal; color:#6b7280;">Skor</small>
+            </div>
+          </li>`;
+      }).join('') : '<li style="text-align:center;color:#999">Belum ada riwayat</li>';
     }
 
-    // --- UTILS ---
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-
-    async function enterFullscreen() {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement && elem.requestFullscreen) {
-        try { await elem.requestFullscreen(); return true; }
-        catch (e) { return false; }
-      }
-      return !!document.fullscreenElement;
-    }
-
-    function exitFullscreenIfAny() {
-      if (document.exitFullscreen && document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
-      }
-    }
-
-    // --- ANTI-CHEAT ---
-    function enableFocusMode() {
+    function enableAntiCheat() {
       state.focusMode = true;
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-      window.addEventListener('blur', handleBlur);
-      document.addEventListener('fullscreenchange', handleFullscreenChange);
+      window.onblur = () => state.focusMode && triggerWarning();
+      document.onvisibilitychange = () => document.hidden && state.focusMode && triggerWarning();
     }
 
-    function disableFocusMode() {
-      state.focusMode = false;
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('blur', handleBlur);
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    function disableAntiCheat() { 
+      state.focusMode = false; 
+      dom.warning.style.display = 'none'; 
       clearInterval(state.warningInterval);
-      dom.warningOverlay.style.display = 'none';
     }
 
-    function handleVisibilityChange() {
-      if (state.focusMode && document.hidden) triggerWarning("Tab berpindah.");
-    }
-
-    function handleBlur() {
-      if (state.focusMode) triggerWarning("Jendela tidak fokus.");
-    }
-
-    function handleFullscreenChange() {
-      if (state.focusMode && state.fullscreenSupported && !document.fullscreenElement) {
-        triggerWarning("Keluar dari fullscreen.");
-      }
-    }
-
-    function triggerWarning(reason) {
-      if (!state.focusMode || dom.warningOverlay.style.display === 'flex') return;
-      dom.warningOverlay.style.display = 'flex';
-      let timeLeft = CONFIG.warningSeconds;
-      dom.warningTimer.textContent = String(timeLeft);
+    function triggerWarning() {
+      if (dom.warning.style.display === 'flex') return;
+      dom.warning.style.display = 'flex';
+      let t = 3; 
+      dom.warnTimer.textContent = t;
       clearInterval(state.warningInterval);
       state.warningInterval = setInterval(() => {
-        timeLeft--;
-        dom.warningTimer.textContent = String(timeLeft);
-        if (document.hasFocus() && (!state.fullscreenSupported || !!document.fullscreenElement)) {
-          clearInterval(state.warningInterval);
-          dom.warningOverlay.style.display = 'none';
-          return;
-        }
-        if (timeLeft <= 0) {
-          clearInterval(state.warningInterval);
-          resetQuizViolation();
+        t--; 
+        dom.warnTimer.textContent = t;
+        if (t <= 0) { 
+          clearInterval(state.warningInterval); 
+          disqual(); 
         }
       }, 1000);
+      document.getElementById('warning-return-btn').onclick = () => { 
+        clearInterval(state.warningInterval); 
+        dom.warning.style.display = 'none'; 
+      };
     }
 
-    function resetQuizViolation() {
-      disableFocusMode();
-      stopTimer();
-      dom.warningOverlay.style.display = 'none';
-      saveHistoryToStorage("Diskualifikasi", 0, formatDuration(state.timerSec), state.startTime, new Date(), state.index, state.questions.length);
-      alert("Pelanggaran terdeteksi! Skor 0 dicatat.");
-      returnToLogin();
+    function disqual() {
+      const endTime = new Date();
+      const countAttempted = state.index;
+      disableAntiCheat();
+      clearInterval(state.timerInterval);
+      
+      // Update UI Result khusus Diskualifikasi
+      dom.finalScore.textContent = "0";
+      dom.finalScore.style.borderColor = "var(--error)";
+      dom.finalScore.style.color = "var(--error)";
+      dom.resultIcon.textContent = "🚫";
+      dom.resultTitle.textContent = "Diskualifikasi";
+      dom.resultInfo.innerHTML = `<span style="color:var(--error)">PELANGGARAN MODE FOKUS</span><br>Sesi dihentikan pada soal ke-${countAttempted + 1}<br>Skor otomatis dianggap 0.`;
+      
+      showScreen('result');
+      saveHistory(0, "Diskualifikasi", countAttempted);
+      sendResult(0, "Diskualifikasi", endTime, countAttempted);
     }
 
-    function handleKeyDown(e) {
-      if (!state.focusMode || state.inputLocked) return;
-      if (e.key === 'Backspace') {
-        e.preventDefault();
-        removeLastLetter();
-      }
+    function resetApp() {
+      state.focusMode = false;
+      clearInterval(state.timerInterval);
+      clearInterval(state.warningInterval);
+      dom.nameInp.value = "";
+      dom.submitStatus.textContent = "";
+      showScreen('login');
+      renderHistory();
+      window.scrollTo(0,0);
     }
+
+    dom.startBtn.onclick = startQuiz;
+    dom.returnBtn.onclick = resetApp;
+    document.getElementById('reset-answer-btn').onclick = () => state.currentAnswer.forEach((_, i) => removeChar(i));
+    document.getElementById('clear-history-btn').onclick = () => { if(confirm("Hapus semua riwayat remedial?")) { localStorage.removeItem('ipa_remidi_h'); renderHistory(); } };
+
+    renderHistory();
   </script>
 </body>
 </html>
